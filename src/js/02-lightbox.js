@@ -18,5 +18,5 @@ function createImagesListMarkup(galleryItems) {
 
 const lightBox = new SimpleLightbox(".gallery a", {
   captionsData: "alt",
-  captionsDelay: 250,
+  captionDelay: 250,
 });

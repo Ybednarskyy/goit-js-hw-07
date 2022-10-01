@@ -1,9 +1,11 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
+// Change code below this
+
 const galaryBoxRef = document.querySelector(".gallery");
 const markup = createImagesListMarkup(galleryItems);
 galaryBoxRef.insertAdjacentHTML("beforeend", markup);
 galaryBoxRef.addEventListener("click", onImageClick);
+let instance;
 
 function createImagesListMarkup(galleryItems) {
   return galleryItems
@@ -23,24 +25,31 @@ function createImagesListMarkup(galleryItems) {
 }
 
 function onImageClick(evt) {
-  console.log(evt.target);
   blockStandartAction(evt);
 
   if (evt.target.nodeName !== "IMG") {
     return;
   }
 
-  const instance = basicLightbox.create(
-    `<img src="${evt.target.dataset.source}"></img>`
+  instance = basicLightbox.create(
+    `<img src="${evt.target.dataset.source}"></img>`,
+
+    {
+      onShow: (instance) => {
+        window.addEventListener("keydown", escapeHandler);
+      },
+      onClose: (instance) => {
+        window.removeEventListener("keydown", escapeHandler);
+      },
+    }
   );
   instance.show();
-  //   console.log(instance.visible());
+}
 
-  galaryBoxRef.addEventListener("keydown", (evt) => {
-    if (instance.visible && evt.code === "Escape") {
-      instance.close();
-    }
-  });
+function escapeHandler(evt) {
+  if (evt.code === "Escape") {
+    instance.close();
+  }
 }
 
 function blockStandartAction(evt) {
